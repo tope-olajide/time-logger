@@ -1,0 +1,258 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+@font-face {
+  font-family: "DigitalFont";
+  src: url("./Custom-Font/digital-7\ \(mono\).ttf");
+  }
+  .timer-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width:90%;
+    margin:3rem auto
+  }
+.timer-card {
+  width: 350px;
+  height: 220px;
+  background-color: #f2f2f2;
+  margin: 10px;
+  padding: 0px;
+  background: -moz-linear-gradient(
+    -45deg,
+    #f2f2f2 0%,
+    #f2dfe8 50%,
+    #c4c1c5 100%
+  );
+  background: -webkit-linear-gradient(
+    -45deg,
+    #f2f2f2 0%,
+    #f2dfe8 50%,
+    #c4c1c5 100%
+  );
+  background: linear-gradient(135deg, #f2f2f2 0%, #f2dfe8 50%, #c4c1c5 100%);
+  box-shadow: 0 2px 1px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 1px;
+}
+.digital-time-section{
+  display: flex;
+  font-family:  "DigitalFont", Arial, sans-serif;
+  font-size: 2.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.2rem;
+}
+.digital-time-section h3{
+    margin: .2rem;
+}
+.pomodoro-task{
+height: 50px;
+overflow: auto;
+}
+.timer-card-header {
+border-bottom: 1px solid rgb(0, 0, 0,.1);
+display: flex;
+justify-content: space-between;
+
+height: 45px; margin: 0;
+align-items: center;overflow: auto;
+
+}
+.timer-card h6{
+  margin: 0rem;
+  text-align: center;
+  border-bottom: 1px solid rgb(0, 0, 0,0.2);
+  font-size: 0.8rem;
+padding:2px
+}
+.task-title-section{
+  font-size: .7rem;
+  margin-left: 5px;
+  min-width: 300px;
+ 
+}
+.delete-task-icon{
+  margin: 5px;
+  border: 2px solid black;
+  text-align:right;
+  font-weight: 900;
+  padding: 0 5px;
+  font-size: .8rem;
+  height: 20px; cursor: pointer;
+
+}
+
+.pomodoro-task p {
+  font-size: .8rem;
+  text-align: justify;margin: 0px;
+  padding: 0 5px;
+  margin-top: 7px;
+  }
+.card-button-container{
+display: flex;
+justify-content: space-around;
+}
+.add-task-section{
+  margin: 0 auto;
+  width: 500px;
+  text-align: center;
+}
+form{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 100%;
+}
+.timer-input-field{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+.timer-input-field input[type="text"]{
+  width:40px;
+  margin:0;
+  padding: 1rem;
+  font-size: 1rem;
+  text-align: center;
+}
+button {
+  height: 2rem;
+  width: 48%;
+  text-align: center;
+  color: white;
+  border: 1px solid black;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
+  background-color: rgb(0, 0, 0,.9);
+}
+input[type="text"],
+textarea {
+	display: block;
+	height: 1rem;
+	padding: 1rem 2rem;
+	border: 0;
+	outline: none;
+	color: rgba(0, 0, 0, 0.7);
+	font-family: "roboto-regular", sans-serif;
+	font-size: 1rem;
+	line-height: 3rem;
+	max-width: 100%;
+	background: rgba(0, 0, 0, 0.1);
+}
+textarea {
+  min-height: 5rem;
+  margin-top: 5px;
+}
+.add-task-button{
+  width: 100%;
+  margin-top: 5px;
+  height:2.7rem;
+}
+/* Edit Task Form Section */
+.edit-task-section{
+  width:100%;
+}
+.edit-task-section button{
+  height:2.1rem;
+  font-size: .8rem;
+}
+.edit-task-section input[type="text"]{
+  height: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: .8rem;
+}
+.edit-task-section label{
+  font-size: .7rem;
+}
+
+.edit-task-section textarea {
+  min-height: 55px;
+  margin-top: 5px;
+  padding: 0.1rem .7rem;
+  font-size: .8rem;
+}
+.edit-task-section .timer-input-field{
+  margin: 3px 0;
+}
+.edit-task-section .timer-input-field input[type="text"]{
+  width: 30px;
+}
+.modal{
+  display: block; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.9);
+}
+.alarm-section, .break-section{
+  width:350px;
+  align-items: center;
+  display:flex;
+  justify-content: center;
+  margin:100px auto;
+  background-color: #f2f2f2;
+  flex-direction: column;
+  
+}
+.alarm-section h1{
+  border-bottom:2px solid rgb(0, 0, 0,.1);
+  width:100%;
+  text-align:center;
+  margin:10px;
+  padding-bottom:10px;
+
+}
+.alarm-section img{
+  width:80%;
+  border:1px solid rgb(0, 0, 0,.06)
+}
+.alarm-section button{
+  margin:10px;
+  border:5px solid black;
+  height:40px;
+  width:80%
+
+}
+.break-section{
+  padding: 15px 0em;
+}
+.break-section h1{
+  margin:0rem;
+  padding-bottom: 7px;
+  text-align: center;
+  font-size: 1.3rem;
+  border-bottom: 1px solid rgb(0, 0, 0,.3);
+  width: 100%;
+}
+.break-section .digital-time-section{
+  font-size: 6rem;
+}
+.break-button-container{
+  width: 98%;
+  justify-content: space-between;
+  display: flex;
+}
+.break-button-container button {
+  height: 35px;
+}
