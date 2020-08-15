@@ -19,6 +19,8 @@ const TaskCard: React.FC<{
   toggleEditTaskComponent: (id: number) => void;
   removeTask: (id: number) => void;
   saveTask: (id: number) => void;
+  restartTask: (id: number) => void;
+  
 }> = ({
   minutes,
   hours,
@@ -32,6 +34,7 @@ const TaskCard: React.FC<{
   toggleEditTaskComponent,
   removeTask,
   saveTask,
+  restartTask
 }) => {
   return (
     <>
@@ -58,7 +61,11 @@ const TaskCard: React.FC<{
         <section className="card-button-container">
           {status === Status.Running ? (
             <button onClick={() => pauseTask(id)}>Pause</button>
-          ) : (
+          ) : status === Status.Finished ? (
+            <button onClick={() => restartTask(id)}>Restart</button>
+          )
+          
+          : (
             <button onClick={() => startTask(id)}>
               {status === Status.Paused ? "Continue" : "Start"}
             </button>
