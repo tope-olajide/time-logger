@@ -1,16 +1,21 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import useForm from "../useForm";
-import EditTaskForm from './EditTaskForm'
-import TaskCard from './TaskCard'
-import CreateTaskForm from './CreateTaskForm'
-import Alarm from './Alarm'
-import ShortBreak from './ShortBreak'
+import EditTaskForm from "./EditTaskForm";
+import TaskCard from "./TaskCard";
+import CreateTaskForm from "./CreateTaskForm";
+import Alarm from "./Alarm";
+import Break from "./Break";
 enum Status {
-    Pending="Pending",
-    Paused="Paused",
-    Stopped="Stopped",
-    Running="Running",
-    Finished="Finished"
+  Pending = "Pending",
+  Paused = "Paused",
+  Stopped = "Stopped",
+  Running = "Running",
+  Finished = "Finished",
+}
+enum BreakType {
+  Short = "Short",
+  Long = "Long",
+  None = "None",
 }
 interface Itask {
   taskTitle: string;
@@ -25,9 +30,11 @@ interface Itask {
 
 const Timer = () => {
   const [tasks, setTasks] = useState<Array<Itask>>([]);
-  const [displayAlarm, setDisplayAlarm] = useState(false);
-  const [isShortBreak, setIsShortBreak] = useState(false);
+  const [isAlarm, setIsAlarm] = useState(false);
+  const [isBreakTime, setIsBreakTime] = useState(false);
+  const [finishedTaskNumber, setFinishedTaskNumber] = useState(0);
   const [currentTaskId, setCurrentTaskId] = useState<number>(0);
+  const [breakType, setBreakType] = useState<BreakType>(BreakType.None);
 
   const { inputs, handleChange, resetInputs } = useForm();
   const addNewTask = (
@@ -39,8 +46,8 @@ const Timer = () => {
       taskSummary: inputs.taskSummary || "No Task Description",
       status: Status.Pending,
       hours: inputs.hours || 0,
-      minutes: inputs.minutes || 0,
-      seconds: inputs.seconds || 4,
+      minutes: inputs.minutes || 25,
+      seconds: inputs.seconds || 0,
       isEdit: false,
       id: Date.now(),
     };
@@ -69,15 +76,35 @@ const Timer = () => {
     });
     setTasks(updatedTask);
   };
-  const toggleAlarm = () => {
-    setDisplayAlarm(!displayAlarm);
+  const restartTask = (taskId: number) => {
+    const updatedTask = tasks.map((task) => {
+      if (task.id === taskId) {
+        return {
+          ...task,
+          status: Status.Running,
+          hours: 0,
+          minutes: 25,
+          seconds: 0,
+        };
+      }
+      return task;
+    });
+    setTasks(updatedTask);
   };
+  const toggleAlarm = useCallback(() => {
+    setIsAlarm(!isAlarm);
+  }, [isAlarm]);
   const closeAlarm = () => {
-    setDisplayAlarm(false);
-    setIsShortBreak(true);
+    setIsAlarm(false);
+    if (finishedTaskNumber % 3 === 0) {
+      setBreakType(BreakType.Long);
+    } else {
+      setBreakType(BreakType.Short);
+    }
+    setIsBreakTime(true);
   };
-  const toggleShortBreak = () => {
-    setIsShortBreak(!isShortBreak);
+  const toggleBreak = () => {
+    setIsBreakTime(!isBreakTime);
   };
 
   const timeRef: React.MutableRefObject<number> = useRef(0);
@@ -90,6 +117,7 @@ const Timer = () => {
         if (timer.hours === 0 && timer.minutes <= 0 && timer.seconds <= 0) {
           toggleAlarm();
           clearTimeout(timeRef.current);
+          setFinishedTaskNumber(finishedTaskNumber + 1);
           setTasks([
             {
               ...timer,
@@ -132,46 +160,43 @@ const Timer = () => {
     return () => {
       clearTimeout(timeRef.current);
     };
-  }, [tasks, currentTaskId]);
+  }, [tasks, currentTaskId, toggleAlarm, finishedTaskNumber]);
 
   const startTask = (taskId: number) => {
-     setTasks(tasks.map((task) => {
-      if (task.id === taskId) {
-        return {
-          ...task,
-          status: Status.Running,
-        };
-      } else if (task.status === Status.Paused) {
-        return {
-          ...task,
-          status: Status.Paused,
-        };
-      } else {
-        return { ...task, status: Status.Pending };
-      }
-    }));
+    setTasks(
+      tasks.map((task) => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            status: Status.Running,
+          };
+        }
+        return task;
+      })
+    );
     setCurrentTaskId(taskId);
   };
 
   const pauseTask = (taskId: number) => {
-    setTasks(tasks.map((task) => {
-      if (task.id === taskId) {
-        return {
-          ...task,
-          status: Status.Paused,
-        };
-      } else {
-        return { ...task, status: Status.Pending };
-      }
-    })
+    setTasks(
+      tasks.map((task) => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            status: Status.Paused,
+          };
+        }
+        return task;
+      })
     );
     clearTimeout(timeRef.current);
   };
   const removeTask = (taskId: number) => {
-     setTasks(tasks.filter((task) => {
-      return task.id !== taskId;
-    })
-    )
+    setTasks(
+      tasks.filter((task) => {
+        return task.id !== taskId;
+      })
+    );
   };
   const saveTask = (taskId: number) => {
     removeTask(taskId);
@@ -225,13 +250,18 @@ const Timer = () => {
         toggleEditTaskComponent={toggleEditTaskComponent}
         removeTask={removeTask}
         saveTask={saveTask}
+        restartTask={restartTask}
       />
     );
   });
   return (
     <>
-      {isShortBreak ? <ShortBreak toggleShortBreak={toggleShortBreak} /> : ""}
-      {displayAlarm ? (
+      {isBreakTime ? (
+        <Break toggleBreak={toggleBreak} breakType={breakType} />
+      ) : (
+        ""
+      )}
+      {isAlarm ? (
         <Alarm toggleAlarm={toggleAlarm} closeAlarm={closeAlarm} />
       ) : (
         ""
