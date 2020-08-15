@@ -18,7 +18,7 @@ const Alarm: React.FC<{ toggleAlarm: () => void; closeAlarm: () => void }> = ({
     <>
       <section className="modal">
         <section className="alarm-section">
-          <h1>Time to take your short break</h1>
+          <h1>Time to take your break</h1>
           <img src={alarmClock} alt="alarm-clock" />
           <button onClick={closeAlarm} className="">
             Take Break
